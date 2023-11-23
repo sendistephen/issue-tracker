@@ -17,11 +17,14 @@ import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createIssueSchema } from '@/app/validationSchema';
+import ErrorMessage from '@/app/components/ErrorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 function NewIssuePage() {
   const [error, setError] = useState('');
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -48,6 +51,7 @@ function NewIssuePage() {
         className='space-y-3'
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             await axios.post('/api/issues', data);
             router.push('/issues');
           } catch (error) {
@@ -58,11 +62,7 @@ function NewIssuePage() {
         <TextField.Root>
           <TextFieldInput placeholder='Title' {...register('title')} />
         </TextField.Root>
-        {errors.title && (
-          <Text color='red' as='p'>
-            {errors.title.message}
-          </Text>
-        )}
+        {errors.title && <ErrorMessage>{errors.title?.message}</ErrorMessage>}
 
         <Controller
           name='description'
@@ -72,12 +72,12 @@ function NewIssuePage() {
           )}
         />
         {errors.description && (
-          <Text color='red' as='p'>
-            {errors.description.message}
-          </Text>
+          <ErrorMessage>{errors.description?.message}</ErrorMessage>
         )}
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
