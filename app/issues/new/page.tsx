@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Button,
-  Callout,
-  Text,
-  TextField,
-  TextFieldInput,
-} from '@radix-ui/themes';
+import { Button, Callout, TextField, TextFieldInput } from '@radix-ui/themes';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import { Controller, useForm } from 'react-hook-form';
@@ -37,6 +31,16 @@ function NewIssuePage() {
     resolver: zodResolver(createIssueSchema),
   });
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      await axios.post('/api/issues', data);
+      router.push('/issues');
+    } catch (error) {
+      setError('An expected error occured.');
+    }
+  });
+
   return (
     <div className='max-w-xl'>
       {error && (
@@ -47,18 +51,7 @@ function NewIssuePage() {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form
-        className='space-y-3'
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setSubmitting(true);
-            await axios.post('/api/issues', data);
-            router.push('/issues');
-          } catch (error) {
-            setError('An expected error occured.');
-          }
-        })}
-      >
+      <form className='space-y-3' onSubmit={onSubmit}>
         <TextField.Root>
           <TextFieldInput placeholder='Title' {...register('title')} />
         </TextField.Root>
