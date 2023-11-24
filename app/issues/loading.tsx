@@ -1,17 +1,14 @@
-import prisma from '@/prisma/client';
-import { Button, Table } from '@radix-ui/themes';
-import Link from 'next/link';
-import IssueStatusBadge from '../components/IssueStatusBadge';
-import delay from 'delay';
+import { Table } from '@radix-ui/themes';
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import IssueActions from './_components/IssueActions';
 
-const IssuesPage = async () => {
-  const issues = await prisma.issue.findMany();
-  await delay(2000);
+const LoadingIssuesPage = () => {
+  const issues = [1, 2, 3, 4, 5];
   return (
     <div>
-      <Button>
-        <Link href='/issues/new'>New Issue</Link>
-      </Button>
+      <IssueActions />
       <Table.Root variant='surface' className='my-2'>
         <Table.Header>
           <Table.Row>
@@ -27,24 +24,24 @@ const IssuesPage = async () => {
 
         <Table.Body>
           {issues.map((issue) => (
-            <Table.Row key={issue.id}>
+            <Table.Row key={issue}>
               <Table.RowHeaderCell>
-                {issue.title}
+                <Skeleton />
                 <div className='flex md:hidden text-xs  '>
                   <span className='mr-2 text-slate-500'>
-                    <IssueStatusBadge status={issue.status} />
+                    <Skeleton />
                   </span>{' '}
                   |
                   <span className='ml-2 text-slate-500'>
-                    {issue.createdAt.toDateString()}
+                    <Skeleton />
                   </span>
                 </div>
               </Table.RowHeaderCell>
               <Table.RowHeaderCell className='hidden md:table-cell'>
-                <IssueStatusBadge status={issue.status} />
+                <Skeleton />
               </Table.RowHeaderCell>
               <Table.Cell className='hidden md:table-cell'>
-                {issue.createdAt.toDateString()}
+                <Skeleton />
               </Table.Cell>
             </Table.Row>
           ))}
@@ -53,4 +50,5 @@ const IssuesPage = async () => {
     </div>
   );
 };
-export default IssuesPage;
+
+export default LoadingIssuesPage;
