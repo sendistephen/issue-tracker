@@ -1,7 +1,3 @@
-import React from 'react';
+import IssueFormSkeleton from '@/app/issues/_components/IssueFormSkeleton';
 
-const LoadingIssueAddPage = () => {
-  return <div>loading...</div>;
-};
-
-export default LoadingIssueAddPage;
+export default IssueFormSkeleton;
