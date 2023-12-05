@@ -5,7 +5,14 @@ import { AiFillBug } from 'react-icons/ai';
 import classnames from 'classnames';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Box, Container, Flex } from '@radix-ui/themes';
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from '@radix-ui/themes';
 
 function Navbar() {
   const currentPath = usePathname();
@@ -43,10 +50,37 @@ function Navbar() {
           </Flex>
           <Box>
             {status === 'authenticated' && (
-              <Link href='/api/auth/signout'>Sign out</Link>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Avatar
+                    size='2'
+                    radius='full'
+                    src={session.user!.image!}
+                    fallback='?'
+                    className='cursor-pointer'
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Label>
+                    <Text>{session.user?.email}</Text>
+                  </DropdownMenu.Label>
+                  <DropdownMenu.Item>
+                    <Link href='/api/auth/signout'>Sign out</Link>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             )}
             {status === 'unauthenticated' && (
               <Link href='/api/auth/signin'>Sign in</Link>
+              // <DropdownMenu.Root>
+              //   <DropdownMenu.Trigger>
+              //     <Avatar size='2' src={session.user!.image!} fallback='?' />
+              //   </DropdownMenu.Trigger>
+              //   <DropdownMenu.Content>
+              //     <DropdownMenu.Item>
+              //     </DropdownMenu.Item>
+              //   </DropdownMenu.Content>
+              // </DropdownMenu.Root>
             )}
           </Box>
         </Flex>
