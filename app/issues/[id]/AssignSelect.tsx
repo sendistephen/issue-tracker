@@ -1,6 +1,6 @@
 'use client';
 import { User } from '@prisma/client';
-import { Box, Select, SelectItem } from '@radix-ui/themes';
+import { Select } from '@radix-ui/themes';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
