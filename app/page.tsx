@@ -1,3 +1,9 @@
+import Pagination from './components/Pagination';
+
 export default function Home() {
-  return <div>Hello world lorem</div>;
+  return (
+    <div>
+      <Pagination currentPage={1} pageSize={10} itemCount={20} />
+    </div>
+  );
 }
