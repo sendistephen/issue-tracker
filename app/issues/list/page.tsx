@@ -1,14 +1,19 @@
 import { IssueStatusBadge } from '@/app/components';
 import prisma from '@/prisma/client';
 import { Issue, Status } from '@prisma/client';
-import { Table } from '@radix-ui/themes';
+import { Flex, Table } from '@radix-ui/themes';
 import { default as Link, default as NextLink } from 'next/link';
 import IssueActions from './IssueActions';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import Pagination from '@/app/components/Pagination';
 
 type Props = {
-  searchParams: { status: Status; orderBy: keyof Issue; page: string };
+  searchParams: {
+    status: Status;
+    orderBy: keyof Issue;
+    orderDir: 'asc' | 'desc';
+    page: string;
+  };
 };
 
 const IssuesPage = async ({ searchParams }: Props) => {
@@ -30,7 +35,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
   const orderBy = columns
     .map((column) => column.value)
     .includes(searchParams.orderBy)
-    ? { [searchParams.orderBy]: 'asc' }
+    ? { [searchParams.orderBy]: searchParams.orderDir || 'asc' }
     : undefined;
 
   const page = parseInt(searchParams.page) || 1;
@@ -48,7 +53,8 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   return (
     <div className='space-y-4'>
-      <IssueActions />
+      <IssueActions currentSortColumn={searchParams.orderBy} />
+
       <Table.Root variant='surface' className='my-2'>
         <Table.Header>
           <Table.Row>
