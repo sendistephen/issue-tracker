@@ -4,6 +4,7 @@ import { Avatar, Box, Card, Flex, Heading, Table } from '@radix-ui/themes';
 import Link from 'next/link';
 import { IssueStatusBadge } from './components';
 import IssueSummary from './IssueSummary';
+import IssueChart from './IssueChart';
 
 export default async function Home() {
   const issues = await prisma.issue.findMany({
@@ -19,7 +20,7 @@ export default async function Home() {
     where: { status: 'IN_PROGRESS' },
   });
   return (
-    <Flex direction='column' gap="4">
+    <Flex direction='column' gap='4'>
       <IssueSummary open={open} closed={closed} inProgress={InProgress} />
       <Card>
         <Heading size='4'>Latest Issues</Heading>
@@ -48,6 +49,7 @@ export default async function Home() {
           </Table.Body>
         </Table.Root>
       </Card>
+      <IssueChart open={open} inProgress={InProgress} closed={closed} />
     </Flex>
   );
 }
